@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 500">
+<rect width="700" height="500" rx="32" fill="#EEF2FF"/>
+<circle cx="575" cy="90" r="55" fill="#DDD6FE"/>
+<circle cx="115" cy="400" r="75" fill="#DBEAFE"/>
+<rect x="215" y="275" width="270" height="18" rx="9" fill="#C7D2FE"/>
+<rect x="250" y="295" width="200" height="100" rx="16" fill="#FFFFFF"/>
+<path d="M280 395h140" stroke="#A5B4FC" stroke-width="8" stroke-linecap="round"/>
+<circle cx="350" cy="185" r="52" fill="#F8C9A5"/>
+<path d="M298 178c5-54 99-62 105 3-25-17-69-18-105-3z" fill="#1F2937"/>
+<path d="M315 225c16 24 54 24 70 0v50h-70z" fill="#4F46E5"/>
+<path d="M315 250l-55 72M385 250l55 72" stroke="#4F46E5" stroke-width="28" stroke-linecap="round"/>
+<path d="M260 320l-38 52M440 320l38 52" stroke="#F8C9A5" stroke-width="18" stroke-linecap="round"/>
+<circle cx="190" cy="145" r="20" fill="#4F46E5"/>
+<circle cx="540" cy="260" r="16" fill="#10B981"/>
+<text x="350" y="445" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" font-weight="700" fill="#3730A3">Manage your team with confidence</text>
+</svg>

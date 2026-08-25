@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 60">
+<rect width="48" height="48" rx="12" fill="#4F46E5"/>
+<path d="M24 10l14 8v11c0 9-6 15-14 19-8-4-14-10-14-19V18l14-8z" fill="white" opacity=".98"/>
+<path d="M17 28h14M24 21v14" stroke="#4F46E5" stroke-width="3" stroke-linecap="round"/>
+<text x="60" y="36" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#111827">Employee</text>
+</svg>
