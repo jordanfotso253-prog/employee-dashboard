@@ -9,7 +9,7 @@ export default function Reports() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    employeeService.getEmployees(0, 0).then((data) => setEmployees(data.users)).catch((err) => setError(err instanceof Error ? err.message : 'Unable to load reports.')).finally(() => setLoading(false));
+    employeeService.getEmployees(0, 0).then((data) => setEmployees(data.users)).catch((err) => setError(err instanceof Error ? err.message : 'Impossible de charger les rapports.')).finally(() => setLoading(false));
   }, []);
 
   const departments = Array.from(new Set(employees.map((employee) => employee.company?.department).filter(Boolean)))
@@ -21,46 +21,46 @@ export default function Reports() {
   const activeCount = employees.filter((employee) => (employee.status || 'Active') === 'Active').length;
 
   if (loading) return <div className="loading-center"><div className="spinner" /></div>;
-  if (error) return <div className="state-message state-error" role="alert"><strong>Reports unavailable</strong><span>{error}</span></div>;
+  if (error) return <div className="state-message state-error" role="alert"><strong>Rapports indisponibles</strong><span>{error}</span></div>;
 
   return (
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Reports</h1>
-          <p className="page-subtitle">View company reports and analytics</p>
+          <h1 className="page-title">Rapports</h1>
+          <p className="page-subtitle">Consultez les rapports et analyses de l'entreprise</p>
         </div>
-        <button className="btn btn-primary">Download Report</button>
+        <button className="btn btn-primary">Télécharger le rapport</button>
       </div>
 
       <div className="stats-grid" style={{ marginBottom: '1.5rem' }}>
         <div className="stat-card">
           <div className="stat-value" style={{ color: 'var(--primary)' }}>{employees.length}</div>
-          <div className="stat-label">New Hires</div>
-          <div className="stat-change">Total records</div>
+          <div className="stat-label">Nouveaux recrutements</div>
+          <div className="stat-change">Total des enregistrements</div>
         </div>
         <div className="stat-card">
           <div className="stat-value" style={{ color: 'var(--danger)' }}>0</div>
-          <div className="stat-label">Terminations</div>
-          <div className="stat-change">No status history</div>
+          <div className="stat-label">Départs</div>
+          <div className="stat-change">Pas d'historique de statut</div>
         </div>
         <div className="stat-card">
           <div className="stat-value">{activeCount}</div>
-          <div className="stat-label">Active Employees</div>
+          <div className="stat-label">Employés actifs</div>
         </div>
         <div className="stat-card">
           <div className="stat-value" style={{ color: 'var(--success)' }}>—</div>
-          <div className="stat-label">Attendance unavailable</div>
+          <div className="stat-label">Présence non disponible</div>
         </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }} className="reports-charts">
         <div className="card">
-          <h3 style={{ fontWeight: 600, marginBottom: '1rem' }}>Employees by Department</h3>
+          <h3 style={{ fontWeight: 600, marginBottom: '1rem' }}>Employés par département</h3>
           <div className="chart-placeholder"><ResponsiveContainer width="100%" height="100%"><BarChart data={departments}><XAxis dataKey="name" axisLine={false} tickLine={false} /><YAxis axisLine={false} tickLine={false} /><Tooltip /><Bar dataKey="employees" fill="#4f46e5" radius={[4, 4, 0, 0]} /></BarChart></ResponsiveContainer></div>
         </div>
         <div className="card">
-          <h3 style={{ fontWeight: 600, marginBottom: '1rem' }}>Age Distribution</h3>
+          <h3 style={{ fontWeight: 600, marginBottom: '1rem' }}>Répartition par âge</h3>
           <div className="chart-placeholder"><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={ages} dataKey="value" nameKey="name" innerRadius={55} outerRadius={82}>{['#4f46e5', '#3b82f6', '#10b981', '#f59e0b'].map((color) => <Cell key={color} fill={color} />)}</Pie><Tooltip /></PieChart></ResponsiveContainer></div>
         </div>
       </div>

@@ -1,23 +1,32 @@
 import { NavLink } from 'react-router-dom';
-import { BarChart3, LayoutDashboard, Settings, Users } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Users,
+  Briefcase,
+  CalendarDays,
+  BarChart3,
+} from 'lucide-react';
 
 const links = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/employees', icon: Users, label: 'Employees' },
-  { to: '/reports', icon: BarChart3, label: 'Reports' },
-  { to: '/settings', icon: Settings, label: 'Settings' },
+  { to: '/dashboard', icon: LayoutDashboard, label: 'Accueil' },
+  { to: '/employees', icon: Users, label: 'Employés' },
+  { to: '/recruitment', icon: Briefcase, label: 'Recrut.' },
+  { to: '/leaves', icon: CalendarDays, label: 'Congés' },
+  { to: '/reports', icon: BarChart3, label: 'Rapports' },
 ];
 
 export function MobileNav() {
   return (
-    <nav className="mobile-nav" aria-label="Mobile navigation">
+    <nav className="mobile-nav">
       {links.map(({ to, icon: Icon, label }) => (
         <NavLink
           key={to}
           to={to}
-          className={({ isActive }) => `mobile-nav-link ${isActive ? 'active' : ''}`}
+          className={({ isActive }) =>
+            `mobile-nav-link ${isActive ? 'active' : ''}`
+          }
         >
-          <Icon size={19} strokeWidth={2} />
+          <Icon size={20} />
           <span>{label}</span>
         </NavLink>
       ))}

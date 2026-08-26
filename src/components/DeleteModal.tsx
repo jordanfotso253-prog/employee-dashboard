@@ -13,17 +13,17 @@ export function DeleteModal({ name, onCancel, onConfirm }: DeleteModalProps) {
         <div className="modal-icon">
           <AlertTriangle size={26} />
         </div>
-        <h3>Delete Employee</h3>
+        <h3>Supprimer l&apos;employé</h3>
         <p>
-          Are you sure you want to delete <strong>{name}</strong>?<br />
-          This action cannot be undone.
+          Êtes-vous sûr de vouloir supprimer <strong>{name}</strong> ?<br />
+          Cette action est irréversible.
         </p>
         <div className="modal-actions">
           <button className="btn btn-outline" onClick={onCancel}>
-            Cancel
+            Annuler
           </button>
           <button className="btn btn-danger" onClick={onConfirm}>
-            Delete
+            Supprimer
           </button>
         </div>
       </div>

@@ -1,30 +1,39 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { Bell, LockKeyhole, Moon, Save, Sun, UserRound, SlidersHorizontal } from 'lucide-react';
+import {
+  Bell,
+  LockKeyhole,
+  Moon,
+  Save,
+  Sun,
+  UserRound,
+  SlidersHorizontal,
+  Camera,
+} from 'lucide-react';
 
 const tabs = [
-  { name: 'Profile', icon: UserRound },
-  { name: 'Security', icon: LockKeyhole },
+  { name: 'Profil', icon: UserRound },
+  { name: 'Sécurité', icon: LockKeyhole },
   { name: 'Notifications', icon: Bell },
-  { name: 'Appearance', icon: Moon },
-  { name: 'Preferences', icon: SlidersHorizontal },
+  { name: 'Apparence', icon: Moon },
+  { name: 'Préférences', icon: SlidersHorizontal },
 ];
 
 export default function Settings() {
   const { user, updateAvatar } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const [activeTab, setActiveTab] = useState('Profile');
+  const [activeTab, setActiveTab] = useState('Profil');
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      window.alert('Please select an image file.');
+      window.alert('Veuillez sélectionner une image.');
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      window.alert('The image must be smaller than 5 MB.');
+      window.alert("L'image doit faire moins de 5 Mo.");
       return;
     }
     const reader = new FileReader();
@@ -33,69 +42,160 @@ export default function Settings() {
   };
 
   const renderTabContent = () => {
-    if (activeTab === 'Security') {
-      return <>
-        <h3 className="settings-panel-title">Security</h3>
-        <p className="settings-panel-description">Protect your account with a strong password.</p>
-        <div className="form-group"><label className="form-label">Current Password</label><input type="password" className="form-input" placeholder="Enter current password" /></div>
-        <div className="form-group"><label className="form-label">New Password</label><input type="password" className="form-input" placeholder="Enter new password" /></div>
-        <button className="btn btn-primary"><Save size={16} /> Update Password</button>
-      </>;
+    if (activeTab === 'Sécurité') {
+      return (
+        <>
+          <h3 className="settings-panel-title">Changer le mot de passe</h3>
+          <p className="settings-panel-description">
+            Mettez à jour votre mot de passe régulièrement pour renforcer la sécurité de votre compte.
+          </p>
+          <div className="form-group">
+            <label className="form-label">Mot de passe actuel</label>
+            <input type="password" className="form-input" placeholder="Entrez votre mot de passe actuel" />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Nouveau mot de passe</label>
+            <input type="password" className="form-input" placeholder="Entrez votre nouveau mot de passe" />
+          </div>
+          <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+            Le mot de passe doit contenir au moins 12 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.
+          </p>
+          <button className="btn btn-primary">
+            <Save size={16} /> Mettre à jour le mot de passe
+          </button>
+        </>
+      );
     }
+
     if (activeTab === 'Notifications') {
-      return <>
-        <h3 className="settings-panel-title">Notifications</h3>
-        <p className="settings-panel-description">Choose which updates you want to receive.</p>
-        {['Employee updates', 'Weekly reports', 'Security alerts'].map((item) => <label className="setting-option" key={item}><span><strong>{item}</strong><small>Receive {item.toLowerCase()} by email</small></span><input type="checkbox" defaultChecked={item !== 'Weekly reports'} /></label>)}
-      </>;
+      return (
+        <>
+          <h3 className="settings-panel-title">Notifications</h3>
+          <p className="settings-panel-description">
+            Choisissez les notifications que vous souhaitez recevoir.
+          </p>
+          {[
+            { title: 'Mises à jour employés', desc: 'Recevoir les mises à jour employés par e-mail' },
+            { title: 'Rapports hebdomadaires', desc: 'Recevoir les rapports hebdomadaires par e-mail' },
+            { title: 'Alertes de sécurité', desc: 'Recevoir les alertes de sécurité par e-mail' },
+          ].map((item) => (
+            <label className="setting-option" key={item.title}>
+              <span>
+                <strong>{item.title}</strong>
+                <small>{item.desc}</small>
+              </span>
+              <input type="checkbox" defaultChecked={item.title !== 'Rapports hebdomadaires'} />
+            </label>
+          ))}
+        </>
+      );
     }
-    if (activeTab === 'Appearance') {
-      return <>
-        <h3 className="settings-panel-title">Appearance</h3>
-        <p className="settings-panel-description">Choose how Employee Manager looks on your device.</p>
-        <button className="appearance-choice" onClick={toggleTheme}><span>{theme === 'light' ? <Moon size={18} /> : <Sun size={18} />} Use {theme === 'light' ? 'dark' : 'light'} mode</span><span className="appearance-status">Current</span></button>
-      </>;
+
+    if (activeTab === 'Apparence') {
+      return (
+        <>
+          <h3 className="settings-panel-title">Apparence</h3>
+          <p className="settings-panel-description">
+            Personnalisez l&apos;apparence de votre interface.
+          </p>
+          <button className="appearance-choice" onClick={toggleTheme}>
+            <span>
+              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+              {theme === 'light' ? 'Passer en mode sombre' : 'Passer en mode clair'}
+            </span>
+            <span className="appearance-status">Actuel</span>
+          </button>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.75rem' }}>
+            Utiliser une interface sombre pour réduire la fatigue visuelle.
+          </p>
+        </>
+      );
     }
-    if (activeTab === 'Preferences') {
-      return <>
-        <h3 className="settings-panel-title">Preferences</h3>
-        <p className="settings-panel-description">Customize the way information is displayed.</p>
-        <div className="form-group"><label className="form-label">Language</label><select className="form-input"><option>English</option><option>French</option></select></div>
-        <div className="form-group"><label className="form-label">Time zone</label><select className="form-input"><option>UTC - 05:00 Eastern Time</option><option>UTC + 01:00 Central European Time</option></select></div>
-      </>;
+
+    if (activeTab === 'Préférences') {
+      return (
+        <>
+          <h3 className="settings-panel-title">Préférences</h3>
+          <p className="settings-panel-description">
+            Langue et paramètres régionaux.
+          </p>
+          <div className="form-group">
+            <label className="form-label">Langue</label>
+            <select className="form-input" defaultValue="fr">
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Fuseau horaire</label>
+            <select className="form-input">
+              <option>UTC +01:00 Heure d&apos;Europe centrale</option>
+              <option>UTC +00:00 GMT</option>
+              <option>UTC -05:00 Eastern Time</option>
+            </select>
+          </div>
+          <button className="btn btn-primary">
+            <Save size={16} /> Enregistrer les modifications
+          </button>
+        </>
+      );
     }
-    return <>
-      <h3 className="settings-panel-title">Profile Information</h3>
-      <div className="profile-avatar-editor">
-        <img src={user?.image} alt={`${user?.firstName} profile`} className="avatar-lg" />
-        <div>
-          <strong>Profile photo</strong>
-          <small>Choose an image up to 5 MB.</small>
+
+    // Profil (default) — layout like mockup
+    return (
+      <>
+        <h3 className="settings-panel-title">Informations du profil</h3>
+        <p className="settings-panel-description">
+          Mettez à jour vos informations personnelles.
+        </p>
+
+        <div className="profile-avatar-row">
+          <img
+            src={user?.image || 'https://i.pravatar.cc/120'}
+            alt={`${user?.firstName || ''} profil`}
+            className="avatar-lg"
+          />
           <label className="btn btn-outline btn-sm profile-upload">
-            Upload photo
-            <input type="file" accept="image/*" onChange={handleAvatarChange} />
+            <Camera size={16} /> Changer la photo
+            <input type="file" accept="image/*" onChange={handleAvatarChange} hidden />
           </label>
         </div>
-      </div>
-      <div className="form-group"><label className="form-label">Full Name</label><input className="form-input" value={`${user?.firstName || ''} ${user?.lastName || ''}`} readOnly /></div>
-      <div className="form-group"><label className="form-label">Email</label><input className="form-input" value={user?.email || ''} readOnly /></div>
-      <div className="form-group"><label className="form-label">Username</label><input className="form-input" value={user?.username || ''} readOnly /></div>
-      <button className="btn btn-primary"><Save size={16} /> Update Profile</button>
-    </>;
+
+        <div className="form-grid-2">
+          <div className="form-group">
+            <label className="form-label">Prénom</label>
+            <input className="form-input" defaultValue={user?.firstName || ''} />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Nom</label>
+            <input className="form-input" defaultValue={user?.lastName || ''} />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">E-mail</label>
+          <input className="form-input" defaultValue={user?.email || ''} />
+        </div>
+
+        <button className="btn btn-primary">
+          <Save size={16} /> Mettre à jour le profil
+        </button>
+      </>
+    );
   };
 
   return (
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Settings</h1>
-          <p className="page-subtitle">Manage your account and preferences</p>
+          <h1 className="page-title">Paramètres</h1>
+          <p className="page-subtitle">Gérez votre compte et vos préférences</p>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: '1.5rem' }} className="settings-layout">
-        <div className="card" style={{ padding: '0.75rem' }}>
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+      <div className="settings-layout">
+        <div className="card settings-nav-card">
+          <nav className="settings-nav">
             {tabs.map(({ name, icon: Icon }) => (
               <button
                 key={name}
@@ -103,22 +203,15 @@ export default function Settings() {
                 onClick={() => setActiveTab(name)}
                 aria-pressed={activeTab === name}
               >
-                <Icon size={16} /> {name}
+                <Icon size={18} />
+                {name}
               </button>
             ))}
           </nav>
         </div>
 
-        <div className="card settings-panel">
-          {renderTabContent()}
-        </div>
+        <div className="card settings-panel">{renderTabContent()}</div>
       </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .settings-layout { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </div>
   );
 }

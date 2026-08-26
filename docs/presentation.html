@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Manager - Présentation du projet</title>
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; color: #172033; background: #e8edf5; }
+.page { width: 210mm; min-height: 297mm; padding: 18mm 17mm; margin: 0 auto 10mm; background: #fff; page-break-after: always; position: relative; overflow: hidden; }
+.page:last-child { page-break-after: auto; }
+.cover { background: linear-gradient(140deg, #101a38 0%, #253c78 58%, #147d82 100%); color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
+.cover:after { content: ""; position: absolute; width: 260mm; height: 80mm; right: -90mm; bottom: 24mm; border: 1px solid rgba(255,255,255,.18); transform: rotate(-18deg); }
+.brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 20px; }
+.brand img { width: 42px; height: 42px; background: #fff; border-radius: 10px; padding: 7px; }
+.cover h1 { font-size: 42px; line-height: 1.05; max-width: 150mm; margin: 0 0 12px; letter-spacing: -1px; }
+.cover h2 { font-size: 18px; font-weight: 400; color: #c9d7f2; max-width: 135mm; line-height: 1.5; }
+.cover-image { width: 120mm; height: 82mm; object-fit: cover; border-radius: 14px; border: 5px solid rgba(255,255,255,.18); box-shadow: 0 16px 35px rgba(0,0,0,.25); }
+.kicker { color: #9ce5dc; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 11px; }
+.footer { position: absolute; bottom: 10mm; left: 17mm; right: 17mm; display: flex; justify-content: space-between; font-size: 10px; color: #8290a9; }
+.cover .footer { color: #b8c8e5; }
+h2 { color: #20376e; font-size: 25px; margin: 0 0 8px; }
+h3 { color: #20376e; margin: 0 0 6px; font-size: 16px; }
+.lead { color: #5c6b82; line-height: 1.55; margin-top: 0; }
+.rule { height: 4px; width: 42mm; background: #12a59a; margin: 12px 0 20px; }
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 11px; }
+.module { border: 1px solid #d9e1ec; border-left: 5px solid #5268d9; border-radius: 7px; padding: 12px; background: #f8faff; min-height: 42mm; }
+.module:nth-child(3n) { border-left-color: #12a59a; }
+.module:nth-child(3n+2) { border-left-color: #e5a83b; }
+.module p { font-size: 11px; line-height: 1.45; color: #5c6b82; margin: 5px 0 0; }
+.pill { display: inline-block; font-size: 10px; color: #4156bf; background: #e7ebff; border-radius: 99px; padding: 4px 8px; margin-top: 8px; }
+.feature-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-top: 15px; }
+.feature-list-compact { display: block; }
+.feature { padding: 8px 0 8px 24px; border-bottom: 1px solid #e3e8f0; font-size: 12px; position: relative; }
+.feature:before { content: "✓"; position: absolute; left: 0; color: #12a59a; font-weight: 700; }
+.visual { border: 1px solid #d9e1ec; border-radius: 10px; padding: 11px; background: #f7f9fc; }
+.visual img { width: 100%; height: 52mm; object-fit: cover; border-radius: 7px; }
+.visual small { color: #697891; display: block; margin-top: 7px; font-size: 10px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.visual-spaced { margin-top: 22px; }
+.two-spaced { margin-top: 18px; }
+.tech { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.tech span { background: #e9efff; color: #3049a7; padding: 7px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; }
+.arch { background: #122044; color: #dce7ff; border-radius: 9px; padding: 16px; line-height: 1.8; font-family: Consolas, monospace; font-size: 11px; }
+.callout { padding: 13px 15px; border-radius: 7px; background: #e8f8f5; border: 1px solid #b7e6de; color: #17665f; line-height: 1.5; font-size: 12px; margin-top: 16px; }
+.mini-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
+.metric { padding: 12px 8px; border-radius: 7px; background: #f0f3ff; text-align: center; }
+.metric strong { display: block; color: #344bc0; font-size: 21px; }
+.metric span { font-size: 9px; color: #697891; }
+@media print { body { background: #fff; } .page { margin: 0; } }
+</style>
+</head>
+<body>
+<section class="page cover">
+  <div class="brand"><img src="../src/assets/logo.svg" alt="Logo"> Employee Manager</div>
+  <div>
+    <div class="kicker">Projet de gestion des ressources humaines</div>
+    <h1>Employee Manager</h1>
+    <h2>Application web responsive pour centraliser les collaborateurs, les congés, le recrutement, la paie, la formation et les rapports RH.</h2>
+    <img class="cover-image" src="../src/assets/hero.png" alt="Illustration du projet">
+  </div>
+  <div class="footer"><span>Présentation du projet</span><span>2026</span></div>
+</section>
+
+<section class="page">
+  <h2>1. Objectif et vue d’ensemble</h2><div class="rule"></div>
+  <p class="lead">Employee Manager répond au besoin de disposer d’un espace unique pour consulter les données du personnel et piloter les activités quotidiennes des ressources humaines.</p>
+  <div class="mini-dashboard"><div class="metric"><strong>208</strong><span>Employés suivis</span></div><div class="metric"><strong>12</strong><span>Départements</span></div><div class="metric"><strong>42</strong><span>Congés validés</span></div><div class="metric"><strong>100%</strong><span>Responsive</span></div></div>
+  <div class="two">
+    <div class="visual"><img src="../src/assets/login-illustration.svg" alt="Écran de connexion"><small>Illustration de l’écran d’authentification et accès protégé aux espaces RH.</small></div>
+    <div>
+      <h3>Parcours utilisateur</h3>
+      <div class="feature-list feature-list-compact"><div class="feature">Connexion sécurisée et session protégée</div><div class="feature">Navigation latérale desktop et mobile</div><div class="feature">Consultation des indicateurs dès l’accueil</div><div class="feature">Accès aux opérations RH depuis les modules</div><div class="feature">Interface claire, responsive et bilingue en cours d’harmonisation</div></div>
+    </div>
+  </div>
+  <div class="callout"><strong>Résultat :</strong> une base fonctionnelle de dashboard RH permettant de regrouper les informations, de réduire les recherches manuelles et de faciliter la présentation des activités de l’entreprise.</div>
+  <div class="footer"><span>Employee Manager</span><span>01</span></div>
+</section>
+
+<section class="page">
+  <h2>2. Modules et activités RH</h2><div class="rule"></div>
+  <div class="grid">
+    <div class="module"><h3>Tableau de bord</h3><p>Vue synthétique de l’effectif, des employés actifs, des départements et de l’âge moyen. Graphiques par département et par genre.</p><span class="pill">Indicateurs + graphiques</span></div>
+    <div class="module"><h3>Employés</h3><p>Recherche générale, filtres par département, statut et genre, pagination, affichage desktop/mobile et menu d’actions.</p><span class="pill">Voir · Modifier · Supprimer</span></div>
+    <div class="module"><h3>Fiche employé</h3><p>Profil détaillé avec coordonnées, informations personnelles et professionnelles, onglets et gestion de suppression.</p><span class="pill">Profil centralisé</span></div>
+    <div class="module"><h3>Recrutement</h3><p>Suivi des offres, des candidatures et des entretiens dans un espace consacré au processus de recrutement.</p><span class="pill">Pipeline recrutement</span></div>
+    <div class="module"><h3>Congés</h3><p>Calendrier mensuel navigable, demandes en attente, approbation/refus et historique des absences.</p><span class="pill">Calendrier interactif</span></div>
+    <div class="module"><h3>Paie</h3><p>Présentation de la masse salariale et des bulletins de paie pour faciliter le suivi administratif.</p><span class="pill">Suivi paie</span></div>
+    <div class="module"><h3>Formation</h3><p>Catalogue de formations et suivi de la progression des collaborateurs.</p><span class="pill">Développement RH</span></div>
+    <div class="module"><h3>Rapports</h3><p>Analyses par département, répartition par âge, effectif actif et export de rapport.</p><span class="pill">Analyse décisionnelle</span></div>
+    <div class="module"><h3>Paramètres</h3><p>Profil, avatar, apparence clair/sombre, notifications, préférences et sécurité du compte.</p><span class="pill">Configuration</span></div>
+  </div>
+  <div class="footer"><span>Fonctionnalités principales</span><span>02</span></div>
+</section>
+
+<section class="page">
+  <h2>3. Fonctionnalités détaillées</h2><div class="rule"></div>
+  <div class="two">
+    <div><h3>Gestion des collaborateurs</h3><div class="feature-list feature-list-compact"><div class="feature">Chargement des employés depuis DummyJSON</div><div class="feature">Recherche générale synchronisée avec l’URL</div><div class="feature">Pagination et filtres combinables</div><div class="feature">Création et modification via formulaire validé</div><div class="feature">Suppression confirmée par une fenêtre modale</div><div class="feature">Actions regroupées dans un menu “Plus d’options”</div></div></div>
+    <div><h3>Gestion des congés</h3><div class="feature-list feature-list-compact"><div class="feature">Navigation mois précédent / mois suivant</div><div class="feature">Retour au mois courant avec Aujourd’hui</div><div class="feature">Calcul automatique du calendrier</div><div class="feature">Événements colorés par type de congé</div><div class="feature">Approbation et refus des demandes</div><div class="feature">Historique des décisions</div></div></div>
+  </div>
+  <div class="visual visual-spaced"><img src="../src/assets/hero.png" alt="Visuel de présentation"><small>Visuel d’accompagnement pour présenter l’expérience utilisateur et l’organisation de l’interface.</small></div>
+  <div class="callout"><strong>Responsive design :</strong> l’interface adapte les tableaux, les cartes, la navigation et les actions aux petits écrans, afin de rester utilisable sur ordinateur, tablette et téléphone.</div>
+  <div class="footer"><span>Parcours fonctionnels</span><span>03</span></div>
+</section>
+
+<section class="page">
+  <h2>4. Réalisation technique</h2><div class="rule"></div>
+  <p class="lead">Le projet est construit comme une application frontend moderne, organisée par composants, pages, services, contextes et types.</p>
+  <div class="tech"><span>React 19</span><span>TypeScript</span><span>Vite</span><span>React Router</span><span>React Hook Form</span><span>Zod</span><span>Lucide React</span><span>Recharts</span><span>DummyJSON API</span></div>
+  <div class="arch">Login<br>  └── AuthContext → ProtectedRoute<br>      └── DashboardLayout<br>          ├── Header + recherche générale<br>          ├── Sidebar / MobileNav<br>          └── Pages RH<br>              ├── Dashboard + Recharts<br>              ├── Employees + EmployeeService<br>              ├── Leaves + calendrier d’état local<br>              └── Reports / Settings / autres modules</div>
+  <div class="two two-spaced"><div><h3>Qualité et validation</h3><div class="feature-list feature-list-compact"><div class="feature">Compilation TypeScript et build Vite validés</div><div class="feature">Lint oxlint configuré</div><div class="feature">Formulaires contrôlés avec Zod</div><div class="feature">Composants réutilisables et routes protégées</div></div></div><div><h3>Sécurité appliquée</h3><div class="feature-list feature-list-compact"><div class="feature">Clé d’accès non persistée dans localStorage</div><div class="feature">Ancien token local supprimé au démarrage</div><div class="feature">Déconnexion qui efface la session locale</div><div class="feature">Évolution recommandée : cookie HttpOnly via backend</div></div></div></div>
+  <div class="callout"><strong>Conclusion :</strong> Employee Manager constitue une base solide de portail RH, avec une architecture claire, des workflows essentiels et une expérience adaptée à la démonstration académique.</div>
+  <div class="footer"><span>Architecture et bilan</span><span>04</span></div>
+</section>
+</body>
+</html>

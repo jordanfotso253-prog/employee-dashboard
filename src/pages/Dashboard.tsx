@@ -20,7 +20,7 @@ export default function Dashboard() {
         setEmployees(data.users);
         setTotal(data.total);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unable to load dashboard data.');
+        setError(err instanceof Error ? err.message : 'Impossible de charger les données du tableau de bord.');
       } finally {
         setLoading(false);
       }
@@ -38,7 +38,7 @@ export default function Dashboard() {
     .map((name) => ({ name, employees: employees.filter((employee) => employee.company?.department === name).length }));
 
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  const greeting = hour < 12 ? 'Bonjour' : hour < 18 ? 'Bon après-midi' : 'Bonsoir';
 
   if (loading) {
     return (
@@ -49,7 +49,7 @@ export default function Dashboard() {
   }
 
   if (error) {
-    return <div className="state-message state-error" role="alert"><strong>Dashboard unavailable</strong><span>{error}</span></div>;
+    return <div className="state-message state-error" role="alert"><strong>Tableau de bord indisponible</strong><span>{error}</span></div>;
   }
 
   return (
@@ -58,7 +58,7 @@ export default function Dashboard() {
         <h1 className="page-title">
           {greeting}, {user?.firstName}! 👋
         </h1>
-        <p className="page-subtitle">Here's what's happening in your company today.</p>
+        <p className="page-subtitle">Voici ce qui se passe dans votre entreprise aujourd'hui.</p>
       </div>
 
       <div className="stats-grid">
@@ -66,7 +66,7 @@ export default function Dashboard() {
           <div className="stat-card-top">
             <div>
               <div className="stat-value">{total}</div>
-              <div className="stat-label">Total Employees</div>
+              <div className="stat-label">Effectif total</div>
               <div className="stat-change">From DummyJSON</div>
             </div>
             <div className="stat-icon" style={{ background: '#e0e7ff' }}>
@@ -79,7 +79,7 @@ export default function Dashboard() {
           <div className="stat-card-top">
             <div>
               <div className="stat-value">{activeCount}</div>
-              <div className="stat-label">Active Employees</div>
+              <div className="stat-label">Employés actifs</div>
               <div className="stat-change">Current records</div>
             </div>
             <div className="stat-icon" style={{ background: '#d1fae5' }}>
@@ -92,7 +92,7 @@ export default function Dashboard() {
           <div className="stat-card-top">
             <div>
               <div className="stat-value">{departmentData.length}</div>
-              <div className="stat-label">Departments</div>
+              <div className="stat-label">Départements</div>
               <div className="stat-change">Detected departments</div>
             </div>
             <div className="stat-icon" style={{ background: '#fef3c7' }}>
@@ -136,12 +136,12 @@ export default function Dashboard() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem', height: 220 }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--primary)' }}>{maleCount}</div>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Male</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Hommes</div>
             </div>
             <div style={{ width: 120, height: 120 }}><ResponsiveContainer><PieChart><Pie data={[{ value: maleCount }, { value: femaleCount }]} dataKey="value" innerRadius={38} outerRadius={58} paddingAngle={3}>{["#4f46e5", "#db2777"].map((color) => <Cell key={color} fill={color} />)}</Pie></PieChart></ResponsiveContainer></div>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '2rem', fontWeight: 700, color: '#db2777' }}>{femaleCount}</div>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Female</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Femmes</div>
             </div>
           </div>
         </div>
@@ -149,19 +149,19 @@ export default function Dashboard() {
 
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-          <h3 style={{ fontWeight: 600, fontSize: '0.95rem' }}>Recent Employees</h3>
+          <h3 style={{ fontWeight: 600, fontSize: '0.95rem' }}>Derniers employés</h3>
           <Link to="/employees" style={{ color: 'var(--primary)', fontSize: '0.85rem', fontWeight: 500 }}>
-            View all
+            Voir tous
           </Link>
         </div>
         <div className="table-container" style={{ border: 'none', boxShadow: 'none' }}>
           <table>
             <thead>
               <tr>
-                <th>Employee</th>
-                <th>Department</th>
-                <th>Email</th>
-                <th>Status</th>
+                <th>Employé</th>
+                <th>Département</th>
+                <th>E-mail</th>
+                <th>Statut</th>
               </tr>
             </thead>
             <tbody>
@@ -175,7 +175,7 @@ export default function Dashboard() {
                   </td>
                   <td>{emp.company?.department || '—'}</td>
                   <td>{emp.email}</td>
-                  <td><span className="badge badge-success">Active</span></td>
+                  <td><span className="badge badge-success">Actif</span></td>
                 </tr>
               ))}
             </tbody>

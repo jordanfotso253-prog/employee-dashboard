@@ -1,21 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { employeeService } from '../services/employeeService';
 import type { Employee } from '../types';
-import { Search, Plus, Eye, Edit, Trash2 } from 'lucide-react';
+import { Search, Plus, Eye, Edit, Trash2, MoreVertical } from 'lucide-react';
 import { DeleteModal } from '../components/DeleteModal';
 
 export default function Employees() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [search, setSearch] = useState('');
   const [department, setDepartment] = useState('');
   const [status, setStatus] = useState('');
   const [gender, setGender] = useState('');
   const [page, setPage] = useState(1);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [deleteName, setDeleteName] = useState('');
+  const [openActionsId, setOpenActionsId] = useState<number | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get('search') || '';
   const limit = 10;
 
   useEffect(() => {
@@ -26,7 +28,7 @@ export default function Employees() {
         const data = await employeeService.getEmployees(0, 0);
         setEmployees(data.users);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unable to load employees.');
+        setError(err instanceof Error ? err.message : 'Impossible de charger les employés.');
       } finally {
         setLoading(false);
       }
@@ -58,7 +60,7 @@ export default function Employees() {
       setEmployees((current) => current.filter((employee) => employee.id !== deleteId));
       setDeleteId(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to delete employee.');
+      setError(err instanceof Error ? err.message : "Impossible de supprimer l'employé.");
     }
   };
 
@@ -74,12 +76,12 @@ export default function Employees() {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Employees</h1>
-          <p className="page-subtitle">Manage and organize your employees</p>
+          <h1 className="page-title">Employés</h1>
+          <p className="page-subtitle">Gérez et organisez vos collaborateurs</p>
         </div>
         <Link to="/employees/new" className="btn btn-primary">
           <Plus size={18} />
-          Add Employee
+          Ajouter un employé
         </Link>
       </div>
 
@@ -89,33 +91,38 @@ export default function Employees() {
           <input
             type="text"
             className="form-input"
-            placeholder="Search employees..."
+            placeholder="Rechercher un employé..."
             value={search}
             onChange={(e) => {
-              setSearch(e.target.value);
+              const value = e.target.value;
+              if (value) {
+                setSearchParams({ search: value });
+              } else {
+                setSearchParams({});
+              }
               setPage(1);
             }}
           />
         </div>
         <select className="form-input" value={department} onChange={(e) => { setDepartment(e.target.value); setPage(1); }}>
-          <option value="">All Departments</option>
+          <option value="">Tous les départements</option>
           {departments.map((name) => <option key={name} value={name}>{name}</option>)}
         </select>
         <select className="form-input" value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }}>
-          <option value="">All Status</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
+          <option value="">Tous les statuts</option>
+          <option value="Actif">Actif</option>
+          <option value="Inactif">Inactif</option>
         </select>
         <select className="form-input" value={gender} onChange={(e) => { setGender(e.target.value); setPage(1); }}>
           <option value="">All Gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
+          <option value="male">Homme</option>
+          <option value="female">Femme</option>
         </select>
       </div>
 
       {error ? (
         <div className="state-message state-error" role="alert">
-          <strong>Unable to load employees</strong>
+          <strong>Impossible de charger les employés.</strong>
           <span>{error}</span>
           <button className="btn btn-outline btn-sm" onClick={() => window.location.reload()}>Try again</button>
         </div>
@@ -123,7 +130,7 @@ export default function Employees() {
         <div className="loading-center"><div className="spinner" /></div>
       ) : employees.length === 0 ? (
         <div className="card" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-          No employees found
+          Aucun employé trouvé
         </div>
       ) : (
         <>
@@ -133,10 +140,10 @@ export default function Employees() {
               <thead>
                 <tr>
                   <th>Employee</th>
-                  <th>Department</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Status</th>
+                  <th>Département</th>
+                  <th>E-mail</th>
+                  <th>Téléphone</th>
+                  <th>Statut</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -157,26 +164,38 @@ export default function Employees() {
                     <td>{emp.company?.department || '—'}</td>
                     <td>{emp.email}</td>
                     <td>{emp.phone}</td>
-                    <td><span className="badge badge-success">Active</span></td>
+                    <td><span className="badge badge-success">Actif</span></td>
                     <td>
-                      <div style={{ display: 'flex', gap: '0.4rem' }}>
-                        <Link to={`/employees/${emp.id}`} className="btn btn-outline btn-sm" title="View">
-                          <Eye size={15} />
-                        </Link>
-                        <Link to={`/employees/${emp.id}/edit`} className="btn btn-outline btn-sm" title="Edit">
-                          <Edit size={15} />
-                        </Link>
+                      <div className="employee-actions-menu">
                         <button
                           className="btn btn-outline btn-sm"
-                          style={{ color: 'var(--danger)' }}
-                          title="Delete"
-                          onClick={() => {
-                            setDeleteId(emp.id);
-                            setDeleteName(`${emp.firstName} ${emp.lastName}`);
-                          }}
+                          title="Plus d'options"
+                          aria-label={`Plus d'options pour ${emp.firstName} ${emp.lastName}`}
+                          aria-expanded={openActionsId === emp.id}
+                          onClick={() => setOpenActionsId(openActionsId === emp.id ? null : emp.id)}
                         >
-                          <Trash2 size={15} />
+                          <MoreVertical size={16} />
                         </button>
+                        {openActionsId === emp.id && (
+                          <div className="employee-actions-dropdown">
+                            <Link to={`/employees/${emp.id}`} onClick={() => setOpenActionsId(null)}>
+                              <Eye size={15} /> Voir
+                            </Link>
+                            <Link to={`/employees/${emp.id}/edit`} onClick={() => setOpenActionsId(null)}>
+                              <Edit size={15} /> Modifier
+                            </Link>
+                            <button
+                              className="danger-action"
+                              onClick={() => {
+                                setDeleteId(emp.id);
+                                setDeleteName(`${emp.firstName} ${emp.lastName}`);
+                                setOpenActionsId(null);
+                              }}
+                            >
+                              <Trash2 size={15} /> Supprimer
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -196,10 +215,37 @@ export default function Employees() {
                     {emp.company?.department || '—'} · {emp.email}
                   </div>
                 </div>
-                <span className="badge badge-success">Active</span>
-                <div style={{ display: 'flex', gap: '0.3rem' }}>
-                  <Link to={`/employees/${emp.id}`} className="btn btn-outline btn-sm"><Eye size={14} /></Link>
-                  <Link to={`/employees/${emp.id}/edit`} className="btn btn-outline btn-sm"><Edit size={14} /></Link>
+                <span className="badge badge-success">Actif</span>
+                <div className="emp-card-actions employee-actions-menu">
+                  <button
+                    className="btn btn-outline btn-sm"
+                    title="Plus d'options"
+                    aria-label={`Plus d'options pour ${emp.firstName} ${emp.lastName}`}
+                    aria-expanded={openActionsId === emp.id}
+                    onClick={() => setOpenActionsId(openActionsId === emp.id ? null : emp.id)}
+                  >
+                    <MoreVertical size={16} />
+                  </button>
+                  {openActionsId === emp.id && (
+                    <div className="employee-actions-dropdown">
+                      <Link to={`/employees/${emp.id}`} onClick={() => setOpenActionsId(null)}>
+                        <Eye size={15} /> Voir
+                      </Link>
+                      <Link to={`/employees/${emp.id}/edit`} onClick={() => setOpenActionsId(null)}>
+                        <Edit size={15} /> Modifier
+                      </Link>
+                      <button
+                        className="danger-action"
+                        onClick={() => {
+                          setDeleteId(emp.id);
+                          setDeleteName(`${emp.firstName} ${emp.lastName}`);
+                          setOpenActionsId(null);
+                        }}
+                      >
+                        <Trash2 size={15} /> Supprimer
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -207,7 +253,7 @@ export default function Employees() {
 
           <div className="pagination">
             <p className="pagination-info">
-              Showing {(page - 1) * limit + 1} to {Math.min(page * limit, total)} of {total} results
+              Affichage de {(page - 1) * limit + 1} to {Math.min(page * limit, total)} sur {total} results
             </p>
             <div className="pagination-btns">
               <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>‹</button>

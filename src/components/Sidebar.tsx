@@ -1,5 +1,16 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, BarChart3, Settings, LogOut, Building2 } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Users,
+  Briefcase,
+  CalendarDays,
+  Wallet,
+  GraduationCap,
+  BarChart3,
+  Settings,
+  LogOut,
+  Building2,
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface SidebarProps {
@@ -11,10 +22,14 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const { logout } = useAuth();
 
   const links = [
-    { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/employees', icon: Users, label: 'Employees' },
-    { to: '/reports', icon: BarChart3, label: 'Reports' },
-    { to: '/settings', icon: Settings, label: 'Settings' },
+    { to: '/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
+    { to: '/employees', icon: Users, label: 'Employés' },
+    { to: '/recruitment', icon: Briefcase, label: 'Recrutement' },
+    { to: '/leaves', icon: CalendarDays, label: 'Congés' },
+    { to: '/payroll', icon: Wallet, label: 'Paie' },
+    { to: '/training', icon: GraduationCap, label: 'Formation' },
+    { to: '/reports', icon: BarChart3, label: 'Rapports' },
+    { to: '/settings', icon: Settings, label: 'Paramètres' },
   ];
 
   return (
@@ -31,7 +46,9 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           <NavLink
             key={to}
             to={to}
-            className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? 'active' : ''}`
+            }
             onClick={onClose}
           >
             <Icon size={20} />
@@ -50,7 +67,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           style={{ width: '100%' }}
         >
           <LogOut size={20} />
-          Logout
+          Déconnexion
         </button>
       </div>
     </aside>

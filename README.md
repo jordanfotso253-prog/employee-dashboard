@@ -1,55 +1,53 @@
-# Employee Manager Dashboard
+# Employee Manager — Dashboard RH
 
-Modern Employee Management Dashboard — React + TypeScript + Vite.
+Dashboard de gestion des ressources humaines — React + TypeScript + Vite.
 
-Designed to match the provided UI mockups (Login, Dashboard, Employees, Details, Add/Edit, Delete modal, Reports, Settings, Mobile).
+Interface **100 % française**, couleurs du projet d'origine (primary indigo `#4f46e5`, sidebar sombre).
 
-## Features
+## Fonctionnalités
 
-- Login / Logout with DummyJSON API
-- Protected routes + AuthContext
-- Dashboard with stats + gender breakdown + recent employees
-- Employees list (search, pagination, filters UI)
-- Employee Details page
-- Add / Edit Employee forms
-- Delete confirmation modal
-- Reports & Settings pages
-- Fully responsive (desktop + mobile cards + hamburger menu)
+- Connexion / Déconnexion (API DummyJSON)
+- Routes protégées + AuthContext + ThemeContext (clair/sombre)
+- **Tableau de bord** — stats, graphiques, derniers employés
+- **Employés** — liste, recherche, filtres, pagination, ajout/modif/suppression
+- **Fiche employé** — profil complet
+- **Recrutement** — offres, candidatures, entretiens
+- **Congés** — calendrier, demandes en attente, historique
+- **Paie** — masse salariale, bulletins
+- **Formation** — catalogue et progression
+- **Rapports** & **Paramètres**
+- Responsive (desktop + navigation mobile)
 
-## Tech Stack
+## Stack
 
 - React 19 + TypeScript
 - Vite
 - React Router DOM
-- Lucide React (icons)
+- Lucide React
+- Recharts
 - DummyJSON API
 
-## Quick Start
+## Démarrage
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open http://localhost:5173
+Ouvrir http://localhost:5173
 
-**Demo credentials**
-- Username: `emilys`
-- Password: `emilyspass`
+**Identifiants de démo**
+- Utilisateur : `emilys`
+- Mot de passe : `emilyspass`
 
-## Project Structure
+## Structure
 
 ```
 src/
-├── components/   # Sidebar, Header, Layout, ProtectedRoute, DeleteModal
-├── pages/        # Login, Dashboard, Employees, Details, Form, Reports, Settings
+├── components/   # Sidebar, Header, Layout, ProtectedRoute, DeleteModal, MobileNav
+├── pages/        # Login, Dashboard, Employés, Détails, Formulaire,
+│                 # Recrutement, Congés, Paie, Formation, Rapports, Paramètres
 ├── services/     # authService, employeeService
-├── context/      # AuthContext
-└── types/        # TypeScript interfaces
+├── context/      # AuthContext, ThemeContext
+└── types/        # Interfaces TypeScript
 ```
-
-## Scripts
-
-- `npm run dev` — development
-- `npm run build` — production build
-- `npm run preview` — preview build

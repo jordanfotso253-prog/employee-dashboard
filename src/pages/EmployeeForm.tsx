@@ -123,9 +123,9 @@ export default function EmployeeForm() {
 
       <div className="page-header">
         <div>
-          <h1 className="page-title">{isEdit ? 'Edit Employee' : 'Add New Employee'}</h1>
+          <h1 className="page-title">{isEdit ? "Modifier l'employé" : 'Add New Employee'}</h1>
           <p className="page-subtitle">
-            {isEdit ? 'Update employee information' : 'Create a new employee profile'}
+            {isEdit ? 'Mettre à jour les informations' : 'Create a new employee profile'}
           </p>
         </div>
       </div>
@@ -134,54 +134,54 @@ export default function EmployeeForm() {
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="form-grid">
             <div className="form-group">
-              <label className="form-label">First Name *</label>
+              <label className="form-label">Prénom *</label>
               <input
                 name="firstName"
                 className="form-input"
                 {...register('firstName')}
-                placeholder="Enter first name"
+                placeholder="Entrez le prénom"
               />
               {errors.firstName && <span className="field-error">{errors.firstName.message}</span>}
             </div>
             <div className="form-group">
-              <label className="form-label">Last Name *</label>
+              <label className="form-label">Nom *</label>
               <input
                 name="lastName"
                 className="form-input"
                 {...register('lastName')}
-                placeholder="Enter last name"
+                placeholder="Entrez le nom"
               />
               {errors.lastName && <span className="field-error">{errors.lastName.message}</span>}
             </div>
             <div className="form-group">
-              <label className="form-label">Email *</label>
+              <label className="form-label">E-mail *</label>
               <input
                 name="email"
                 type="email"
                 className="form-input"
                 {...register('email')}
-                placeholder="Enter email"
+                placeholder="Entrez l'e-mail"
               />
               {errors.email && <span className="field-error">{errors.email.message}</span>}
             </div>
             <div className="form-group">
-              <label className="form-label">Phone</label>
+              <label className="form-label">Téléphone</label>
               <input
                 name="phone"
                 className="form-input"
                 {...register('phone')}
-                placeholder="Enter phone number"
+                placeholder="Entrez le téléphone"
               />
               {errors.phone && <span className="field-error">{errors.phone.message}</span>}
             </div>
             <div className="form-group">
-              <label className="form-label">Department *</label>
+              <label className="form-label">Département *</label>
               <select
                 name="department"
                 className="form-input"
                 {...register('department')}
               >
-                <option value="">Select department</option>
+                <option value="">Sélectionner un département</option>
                 <option value="HR">HR</option>
                 <option value="IT">IT</option>
                 <option value="Marketing">Marketing</option>
@@ -191,33 +191,33 @@ export default function EmployeeForm() {
               {errors.department && <span className="field-error">{errors.department.message}</span>}
             </div>
             <div className="form-group">
-              <label className="form-label">Position</label>
+              <label className="form-label">Poste</label>
               <input
                 name="title"
                 className="form-input"
                 {...register('title')}
-                placeholder="Enter position"
+                placeholder="Entrez le poste"
               />
               {errors.title && <span className="field-error">{errors.title.message}</span>}
             </div>
             <div className="form-group">
-              <label className="form-label">Gender *</label>
+              <label className="form-label">Genre *</label>
               <select
                 name="gender"
                 className="form-input"
                 {...register('gender')}
               >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="male">Homme</option>
+                <option value="female">Femme</option>
               </select>
             </div>
             <div className="form-group">
-              <label className="form-label">Age *</label>
+              <label className="form-label">Âge *</label>
               <input type="number" min="18" max="100" className="form-input" {...register('age')} placeholder="Enter age" />
               {errors.age && <span className="field-error">{errors.age.message}</span>}
             </div>
             <div className="form-group">
-              <label className="form-label">Date of Birth</label>
+              <label className="form-label">Date de naissance</label>
               <input
                 name="birthDate"
                 type="date"
@@ -226,12 +226,12 @@ export default function EmployeeForm() {
               />
             </div>
             <div className="form-group full-width">
-              <label className="form-label">Address</label>
+              <label className="form-label">Adresse</label>
               <input
                 name="address"
                 className="form-input"
                 {...register('address')}
-                placeholder="Enter address"
+                placeholder="Entrez l'adresse"
               />
             </div>
           </div>
@@ -242,7 +242,7 @@ export default function EmployeeForm() {
               Cancel
             </button>
             <button type="submit" className="btn btn-primary" disabled={saving}>
-              {saving ? 'Saving...' : isEdit ? 'Update Employee' : 'Save Employee'}
+              {saving ? 'Enregistrement...' : isEdit ? 'Update Employee' : 'Save Employee'}
             </button>
           </div>
         </form>
