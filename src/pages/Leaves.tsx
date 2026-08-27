@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import {
   CalendarDays,
   CheckCircle2,
@@ -106,9 +106,44 @@ const typeColors: Record<string, string> = {
 
 export default function Leaves() {
   const [requests, setRequests] = useState(pendingRequests);
+  const [calendarOpen, setCalendarOpen] = useState(true);
+  const [showLeaveForm, setShowLeaveForm] = useState(false);
+  const [leaveForm, setLeaveForm] = useState({
+    type: 'Congés payés',
+    startDate: '2026-06-10',
+    endDate: '2026-06-12',
+    days: '3',
+  });
 
   const handleApprove = (id: number) => {
     setRequests((prev) => prev.filter((r) => r.id !== id));
+  };
+
+  const handleCreateLeaveRequest = (event: FormEvent) => {
+    event.preventDefault();
+
+    const start = new Date(leaveForm.startDate);
+    const end = new Date(leaveForm.endDate);
+    const dayDiff = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+
+    const nextRequest = {
+      id: Date.now(),
+      name: 'Vous',
+      type: leaveForm.type,
+      dates: `${new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }).format(start)} – ${new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }).format(end)}`,
+      days: Number(leaveForm.days) || dayDiff,
+      avatar: 9,
+    };
+
+    setRequests((prev) => [nextRequest, ...prev]);
+    setCalendarOpen(true);
+    setShowLeaveForm(false);
+    setLeaveForm({
+      type: 'Congés payés',
+      startDate: '2026-06-10',
+      endDate: '2026-06-12',
+      days: '3',
+    });
   };
 
     const [calendarDate, setCalendarDate] = useState(new Date(2026, 4, 1));
@@ -144,10 +179,15 @@ export default function Leaves() {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button className="btn btn-outline">
+          <button
+            className="btn btn-outline"
+            type="button"
+            aria-pressed={calendarOpen}
+            onClick={() => setCalendarOpen((current) => !current)}
+          >
             <CalendarDays size={16} /> Calendrier
           </button>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" type="button" onClick={() => setShowLeaveForm(true)}>
             <Plus size={18} /> Demander un congé
           </button>
         </div>
@@ -205,72 +245,74 @@ export default function Leaves() {
         }}
         className="leaves-grid"
       >
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">{monthLabel}</h3>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button
-                className="btn-icon"
-                type="button"
-                aria-label="Mois précédent"
-                onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1))}
-              >‹</button>
-              <button
-                className="btn btn-outline"
-                type="button"
-                style={{ padding: '0.25rem 0.75rem', fontSize: '0.85rem' }}
-                onClick={() => setCalendarDate(new Date())}
-              >
-                Aujourd&apos;hui
-              </button>
-              <button
-                className="btn-icon"
-                type="button"
-                aria-label="Mois suivant"
-                onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1))}
-              >›</button>
+        {calendarOpen && (
+          <div className="card">
+            <div className="card-header">
+              <h3 className="card-title">{monthLabel}</h3>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button
+                  className="btn-icon"
+                  type="button"
+                  aria-label="Mois précédent"
+                  onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1))}
+                >‹</button>
+                <button
+                  className="btn btn-outline"
+                  type="button"
+                  style={{ padding: '0.25rem 0.75rem', fontSize: '0.85rem' }}
+                  onClick={() => setCalendarDate(new Date())}
+                >
+                  Aujourd&apos;hui
+                </button>
+                <button
+                  className="btn-icon"
+                  type="button"
+                  aria-label="Mois suivant"
+                  onClick={() => setCalendarDate(new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1))}
+                >›</button>
+              </div>
+            </div>
+            <div className="calendar-grid">
+              {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map((d) => (
+                <div key={d} className="calendar-day-header">
+                  {d}
+                </div>
+              ))}
+              {[...Array(firstDay)].map((_, i) => (
+                <div key={`e${i}`} className="calendar-day empty" />
+              ))}
+              {[...Array(daysInMonth)].map((_, i) => {
+                const day = i + 1;
+                const dateKey = `${calendarDate.getFullYear()}-${String(calendarDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const events = eventsByDate[dateKey] || [];
+                const isToday = today.getFullYear() === calendarDate.getFullYear()
+                  && today.getMonth() === calendarDate.getMonth()
+                  && today.getDate() === day;
+
+                return (
+                  <div key={day} className={`calendar-day ${isToday ? 'today' : ''}`}>
+                    <span className="calendar-day-num">{day}</span>
+                    {events.map((e, idx) => (
+                      <div
+                        key={idx}
+                        className="calendar-event"
+                        style={{ background: e.color + '22', color: e.color, borderLeft: `3px solid ${e.color}` }}
+                      >
+                        {e.label}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="calendar-legend">
+              <span><span className="legend-dot" style={{ background: 'var(--primary)' }} /> Congés payés</span>
+              <span><span className="legend-dot" style={{ background: 'var(--success)' }} /> RTT</span>
+              <span><span className="legend-dot" style={{ background: 'var(--warning)' }} /> Maladie</span>
+              <span><span className="legend-dot" style={{ background: 'var(--text-muted)' }} /> Sans solde</span>
             </div>
           </div>
-          <div className="calendar-grid">
-            {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map((d) => (
-              <div key={d} className="calendar-day-header">
-                {d}
-              </div>
-            ))}
-            {[...Array(firstDay)].map((_, i) => (
-              <div key={`e${i}`} className="calendar-day empty" />
-            ))}
-            {[...Array(daysInMonth)].map((_, i) => {
-              const day = i + 1;
-              const dateKey = `${calendarDate.getFullYear()}-${String(calendarDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-              const events = eventsByDate[dateKey] || [];
-              const isToday = today.getFullYear() === calendarDate.getFullYear()
-                && today.getMonth() === calendarDate.getMonth()
-                && today.getDate() === day;
-
-              return (
-                <div key={day} className={`calendar-day ${isToday ? 'today' : ''}`}>
-                  <span className="calendar-day-num">{day}</span>
-                  {events.map((e, idx) => (
-                    <div
-                      key={idx}
-                      className="calendar-event"
-                      style={{ background: e.color + '22', color: e.color, borderLeft: `3px solid ${e.color}` }}
-                    >
-                      {e.label}
-                    </div>
-                  ))}
-                </div>
-              );
-            })}
-          </div>
-          <div className="calendar-legend">
-            <span><span className="legend-dot" style={{ background: 'var(--primary)' }} /> Congés payés</span>
-            <span><span className="legend-dot" style={{ background: 'var(--success)' }} /> RTT</span>
-            <span><span className="legend-dot" style={{ background: 'var(--warning)' }} /> Maladie</span>
-            <span><span className="legend-dot" style={{ background: 'var(--text-muted)' }} /> Sans solde</span>
-          </div>
-        </div>
+        )}
 
         <div className="card">
           <div className="card-header">
@@ -393,6 +435,69 @@ export default function Leaves() {
           </table>
         </div>
       </div>
+
+      {showLeaveForm && (
+        <div className="modal-overlay" onClick={() => setShowLeaveForm(false)}>
+          <div className="modal" onClick={(event) => event.stopPropagation()}>
+            <div className="modal-icon">
+              <Plus size={24} />
+            </div>
+            <h3>Demander un congé</h3>
+            <p>Soumettez une demande de congé pour votre équipe.</p>
+            <form onSubmit={handleCreateLeaveRequest} style={{ display: 'grid', gap: '0.9rem', textAlign: 'left' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 600 }}>Type</label>
+                <select
+                  className="form-input"
+                  value={leaveForm.type}
+                  onChange={(event) => setLeaveForm((current) => ({ ...current, type: event.target.value }))}
+                >
+                  <option value="Congés payés">Congés payés</option>
+                  <option value="RTT">RTT</option>
+                  <option value="Congés sans solde">Congés sans solde</option>
+                  <option value="Maladie">Maladie</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 600 }}>Date de début</label>
+                <input
+                  className="form-input"
+                  type="date"
+                  value={leaveForm.startDate}
+                  onChange={(event) => setLeaveForm((current) => ({ ...current, startDate: event.target.value }))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 600 }}>Date de fin</label>
+                <input
+                  className="form-input"
+                  type="date"
+                  value={leaveForm.endDate}
+                  onChange={(event) => setLeaveForm((current) => ({ ...current, endDate: event.target.value }))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 600 }}>Nombre de jours</label>
+                <input
+                  className="form-input"
+                  type="number"
+                  min="1"
+                  value={leaveForm.days}
+                  onChange={(event) => setLeaveForm((current) => ({ ...current, days: event.target.value }))}
+                />
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn btn-outline" onClick={() => setShowLeaveForm(false)}>
+                  Annuler
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Envoyer
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

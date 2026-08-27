@@ -1,7 +1,30 @@
 import { useEffect, useState } from 'react';
 import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Download } from 'lucide-react';
 import { employeeService } from '../services/employeeService';
 import type { Employee } from '../types';
+
+const downloadCsv = (employees: Employee[]) => {
+  const headers = ['Nom', 'Département', 'Email', 'Téléphone', 'Statut'];
+  const rows = employees.map((employee) => [
+    `${employee.firstName} ${employee.lastName}`,
+    employee.company?.department || '—',
+    employee.email,
+    employee.phone,
+    employee.status || 'Active',
+  ].map((value) => `"${String(value).replace(/"/g, '""')}"`).join(','));
+
+  const csvContent = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'rapport-employes.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
 
 export default function Reports() {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -20,6 +43,14 @@ export default function Reports() {
   }));
   const activeCount = employees.filter((employee) => (employee.status || 'Active') === 'Active').length;
 
+  const handleDownloadReport = () => {
+    if (employees.length === 0) {
+      return;
+    }
+
+    downloadCsv(employees);
+  };
+
   if (loading) return <div className="loading-center"><div className="spinner" /></div>;
   if (error) return <div className="state-message state-error" role="alert"><strong>Rapports indisponibles</strong><span>{error}</span></div>;
 
@@ -30,7 +61,10 @@ export default function Reports() {
           <h1 className="page-title">Rapports</h1>
           <p className="page-subtitle">Consultez les rapports et analyses de l'entreprise</p>
         </div>
-        <button className="btn btn-primary">Télécharger le rapport</button>
+        <button className="btn btn-primary" onClick={handleDownloadReport} disabled={employees.length === 0}>
+          <Download size={16} />
+          Télécharger le rapport
+        </button>
       </div>
 
       <div className="stats-grid" style={{ marginBottom: '1.5rem' }}>

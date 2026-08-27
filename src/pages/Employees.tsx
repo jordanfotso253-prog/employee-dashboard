@@ -52,6 +52,36 @@ export default function Employees() {
   const visibleEmployees = filteredEmployees.slice((page - 1) * limit, page * limit);
 
   const totalPages = Math.ceil(total / limit) || 1;
+  const pageItems = (() => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    const items: Array<number | 'ellipsis'> = [1];
+
+    if (page > 3) {
+      items.push('ellipsis');
+    }
+
+    const start = page <= 3 ? 2 : Math.max(2, page);
+    const end = page <= 3 ? 3 : Math.min(totalPages - 1, page + 1);
+
+    for (let p = start; p <= end; p += 1) {
+      if (!items.includes(p)) {
+        items.push(p);
+      }
+    }
+
+    if (page < totalPages - 2) {
+      items.push('ellipsis');
+    }
+
+    if (!items.includes(totalPages)) {
+      items.push(totalPages);
+    }
+
+    return items;
+  })();
 
   const handleDelete = async () => {
     if (!deleteId) return;
@@ -256,20 +286,28 @@ export default function Employees() {
               Affichage de {(page - 1) * limit + 1} to {Math.min(page * limit, total)} sur {total} results
             </p>
             <div className="pagination-btns">
-              <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>‹</button>
-              {Array.from({ length: totalPages }, (_, i) => {
-                const p = i + 1;
+              <button type="button" aria-label="Page précédente" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>‹</button>
+              {pageItems.map((item, index) => {
+                if (item === 'ellipsis') {
+                  return (
+                    <span key={`ellipsis-${index}`} className="pagination-ellipsis">
+                      …
+                    </span>
+                  );
+                }
+
                 return (
                   <button
-                    key={p}
-                    className={page === p ? 'active' : ''}
-                    onClick={() => setPage(p)}
+                    key={item}
+                    className={page === item ? 'active' : ''}
+                    aria-current={page === item ? 'page' : undefined}
+                    onClick={() => setPage(item)}
                   >
-                    {p}
+                    {item}
                   </button>
                 );
               })}
-              <button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>›</button>
+              <button type="button" aria-label="Page suivante" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>›</button>
             </div>
           </div>
         </>

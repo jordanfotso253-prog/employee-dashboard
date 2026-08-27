@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import {
   Briefcase,
   Users,
@@ -14,7 +14,7 @@ import {
 
 type Tab = 'jobs' | 'candidates' | 'interviews';
 
-const openJobs = [
+const initialOpenJobs = [
   {
     id: 1,
     title: 'Responsable Marketing Digital',
@@ -107,6 +107,41 @@ const candidates = [
 
 export default function Recruitment() {
   const [activeTab, setActiveTab] = useState<Tab>('jobs');
+  const [openJobs, setOpenJobs] = useState(initialOpenJobs);
+  const [showOfferForm, setShowOfferForm] = useState(false);
+  const [newOffer, setNewOffer] = useState({
+    title: '',
+    department: 'Marketing',
+    location: '',
+    candidates: '0',
+  });
+
+  const handleCreateOffer = (event: FormEvent) => {
+    event.preventDefault();
+
+    if (!newOffer.title.trim() || !newOffer.location.trim()) {
+      return;
+    }
+
+    const offer = {
+      id: Date.now(),
+      title: newOffer.title.trim(),
+      department: newOffer.department,
+      location: newOffer.location.trim(),
+      candidates: Number(newOffer.candidates) || 0,
+      status: 'Ouvert',
+    };
+
+    setOpenJobs((current) => [offer, ...current]);
+    setActiveTab('jobs');
+    setShowOfferForm(false);
+    setNewOffer({
+      title: '',
+      department: 'Marketing',
+      location: '',
+      candidates: '0',
+    });
+  };
 
   return (
     <div>
@@ -118,10 +153,10 @@ export default function Recruitment() {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button className="btn btn-outline">
+          <button className="btn btn-outline" type="button" onClick={() => setActiveTab('jobs')}>
             <Filter size={16} /> Voir le pipeline
           </button>
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" type="button" onClick={() => setShowOfferForm(true)}>
             <Plus size={18} /> Nouvelle offre
           </button>
         </div>
@@ -348,9 +383,79 @@ export default function Recruitment() {
             <p style={{ color: 'var(--text-muted)' }}>
               14 entretiens planifiés cette semaine. Sélectionnez une date pour voir les détails.
             </p>
-            <button className="btn btn-primary" style={{ marginTop: '1rem' }}>
+            <button
+              className="btn btn-primary"
+              style={{ marginTop: '1rem' }}
+              onClick={() => setActiveTab('jobs')}
+            >
               Ouvrir le calendrier
             </button>
+          </div>
+        </div>
+      )}
+
+      {showOfferForm && (
+        <div className="modal-overlay" onClick={() => setShowOfferForm(false)}>
+          <div className="modal" onClick={(event) => event.stopPropagation()}>
+            <div className="modal-icon">
+              <Plus size={24} />
+            </div>
+            <h3>Nouvelle offre</h3>
+            <p>Ajoutez rapidement une nouvelle opportunité de recrutement.</p>
+            <form onSubmit={handleCreateOffer} style={{ display: 'grid', gap: '0.9rem', textAlign: 'left' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 600 }}>Titre</label>
+                <input
+                  className="form-input"
+                  value={newOffer.title}
+                  onChange={(event) => setNewOffer((current) => ({ ...current, title: event.target.value }))}
+                  placeholder="Chargé de clientèle"
+                  required
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 600 }}>Département</label>
+                <select
+                  className="form-input"
+                  value={newOffer.department}
+                  onChange={(event) => setNewOffer((current) => ({ ...current, department: event.target.value }))}
+                >
+                  <option value="Marketing">Marketing</option>
+                  <option value="IT & Développement">IT & Développement</option>
+                  <option value="Ressources Humaines">Ressources Humaines</option>
+                  <option value="Commercial">Commercial</option>
+                  <option value="Finance">Finance</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 600 }}>Lieu</label>
+                <input
+                  className="form-input"
+                  value={newOffer.location}
+                  onChange={(event) => setNewOffer((current) => ({ ...current, location: event.target.value }))}
+                  placeholder="Bordeaux, France"
+                  required
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.35rem', fontWeight: 600 }}>Candidats</label>
+                <input
+                  className="form-input"
+                  type="number"
+                  min="0"
+                  value={newOffer.candidates}
+                  onChange={(event) => setNewOffer((current) => ({ ...current, candidates: event.target.value }))}
+                />
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn btn-outline" onClick={() => setShowOfferForm(false)}>
+                  Annuler
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Enregistrer
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
